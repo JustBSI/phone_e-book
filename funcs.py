@@ -2,7 +2,7 @@ Record = tuple[str, str, str, str, str, str]
 
 
 def to_record(row: str) -> Record:
-    info = row.split('|')
+    info = row.split('|' if '|' in row else ',')
     return info[0], info[1], info[2], info[3], info[4], info[5]
 
 

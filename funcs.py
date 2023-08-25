@@ -1,3 +1,5 @@
+from config import phone_book
+
 Record = tuple[str, str, str, str, str, str]
 
 
@@ -25,7 +27,7 @@ def add(info: Record):
     Функция добавления новой записи в конец базы данных.
     :param info: Информация в виде переменной типа Record.
     """
-    with open("phone_book.txt", "a") as file:
+    with open(phone_book, "a") as file:
         file.write('\n'+to_row(info))
 
 
@@ -34,7 +36,7 @@ def get() -> list[Record]:
     Функция получения всех записей из базы данных.
     :return: Информация в виде списка переменных типа Record.
     """
-    with open("phone_book.txt", "r") as file:
+    with open(phone_book, "r") as file:
         return [to_record(s) for s in file.read().splitlines()]
 
 
@@ -44,7 +46,7 @@ def find(phrase: str) -> list[Record]:
     :param phrase: Фраза для поиска.
     :return: Результат поиска в виде списка переменных типа Record.
     """
-    with open("phone_book.txt", "r") as file:
+    with open(phone_book, "r") as file:
         return [to_record(s) for s in file.read().splitlines() if phrase in s]
 
 
@@ -54,8 +56,8 @@ def replace(index: int, info: Record):
     :param index: Индекс записи, которую нужно изменить.
     :param info: Строка, на которую нужно заменить информацию в базе данных.
     """
-    with open("phone_book.txt", "r") as file:
+    with open(phone_book, "r") as file:
         pb = file.readlines()
     pb[index-1] = to_row(info) + '\n'
-    with open("phone_book.txt", "w") as file:
+    with open(phone_book, "w") as file:
         file.writelines(pb)

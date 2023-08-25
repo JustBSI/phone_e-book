@@ -5,10 +5,16 @@ import math
 
 @click.group()
 def main():
+    """Функция для группировки функций."""
     ...
 
 
-def show(rows, page=1):
+def show(rows: list, page=1):
+    """
+    Функция, постранично выводящая информацию в консоль.
+    :param rows: Список строк для вывода.
+    :param page: Номер страницы.
+    """
     click.clear()
     data = rows[(page-1)*5:page*5]
     headers = ('ID', 'Фамилия', 'Имя', 'Отчество', 'Орг.', 'Р.номер', 'Личный номер')
@@ -29,14 +35,23 @@ def show(rows, page=1):
 @main.command()
 @click.option('--page', type=click.IntRange(1, int(math.ceil(len(funcs.get())/5)), clamp=True),
               required=True, default=1)
-def view(page):
+def view(page: int):
+    """
+    Функция постраничного вывода всех записей базы данных в консоль.
+    :param page: Номер страницы.
+    """
     show(funcs.get(), page)
 
 
 @main.command()
 @click.argument('phrase', type=str, required=True)
 @click.option('--page', type=int)
-def find(phrase, page):
+def find(phrase: str, page=1):
+    """
+    Функция поиска по фразе в базе данных и постраничного вывода результата поиска в консоль.
+    :param phrase: Фраза для поиска.
+    :param page: Номер страницы.
+    """
     click.clear()
     result = funcs.find(phrase)
     if len(result) != 0:
@@ -50,7 +65,13 @@ def find(phrase, page):
 
 @main.command()
 @click.argument('info', type=str, required=True)
-def add(info):
+def add(info: str):
+    """
+    Функция добавления записи в базу данных.
+    :param info: Строка с информацией, добавляемая в базу данных, в формате:
+                'Иванов,Иван,Иванович,Яндекс,12-34-56,+7-999-123-45-67'.
+                Одинарные кавычки и запятые (без пробелов) обязательны.
+    """
     click.clear()
     if info.count(',') == 5:
         funcs.add(funcs.to_record(info))
@@ -62,7 +83,12 @@ def add(info):
 @main.command()
 @click.argument('index', type=int, required=True)
 @click.argument('info', type=str, required=True)
-def edit(index, info):
+def edit(index: int, info: str):
+    """
+    Функция изменения записи в базе данных по индексу.
+    :param index: Индекс записи, которую нужно изменить.
+    :param info: Строка, на которую нужно заменить информацию в базе данных.
+    """
     click.clear()
     if info.count(',') == 5:
         if 1 <= index <= len(funcs.get()):

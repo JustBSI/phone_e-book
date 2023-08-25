@@ -99,7 +99,3 @@ def edit(index: int, info: str):
             click.secho('Нет записи с таким индексом!', bold=True, fg='red')
     else:
         click.secho('Некорректная строка!', bold=True, fg='red')
-
-
-if __name__ == '__main__':
-    main()

@@ -10,7 +10,7 @@ def main():
     ...
 
 
-def show(rows: list, page=1):
+def show(rows: list, page: int):
     """
     Функция, постранично выводящая информацию в консоль.
     :param rows: Список строк для вывода.
@@ -29,13 +29,12 @@ def show(rows: list, page=1):
         info = (f'{elem[i]:{max_lens[i+1]}}' for i in range(len(elem)))
         click.echo(indexes + ' │ '.join(info))
 
-    click.secho(f"{f'Страница {page} из {int(math.ceil(len(rows))/rows_per_page)}':^{sum(max_lens)+18}}",
+    click.secho(f"{f'Страница {page} из {math.ceil((len(rows))/rows_per_page)}':^{sum(max_lens)+18}}",
                 italic=True, bold=True)
 
 
 @main.command()
-@click.option('--page', type=click.IntRange(1, int(math.ceil(len(funcs.get())/rows_per_page)), clamp=True),
-              required=True, default=1)
+@click.option('--page', type=click.IntRange(1, math.ceil(len(funcs.get())/rows_per_page), clamp=True), default=1)
 def view(page: int):
     """
     Функция постраничного вывода всех записей базы данных в консоль.
@@ -45,9 +44,9 @@ def view(page: int):
 
 
 @main.command()
-@click.argument('phrase', type=str, required=True)
-@click.option('--page', type=int)
-def find(phrase: str, page=1):
+@click.option('--phrase', type=str, required=True)
+@click.option('--page', type=int, default=1)
+def find(phrase: str, page: int):
     """
     Функция поиска по фразе в базе данных и постраничного вывода результата поиска в консоль.
     :param phrase: Фраза для поиска.
@@ -56,7 +55,7 @@ def find(phrase: str, page=1):
     click.clear()
     result = funcs.find(phrase)
     if len(result) != 0:
-        if 1 <= page <= int(math.ceil(len(phrase)/rows_per_page)):
+        if 1 <= page <= math.ceil(len(phrase)/rows_per_page):
             show(result, page)
         else:
             click.secho('Нет страницы с таким номером!', bold=True, fg='red')
